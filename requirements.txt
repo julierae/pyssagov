@@ -1,0 +1,7 @@
+docopt
+python-dateutil
+pytz
+requests
+six
+XlsxWriter
+xmltodict
