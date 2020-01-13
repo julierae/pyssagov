@@ -6,44 +6,49 @@ WORKSHEET_FOOTER = 'Confidential'
 
 
 class Excel(object):
-    right_now = None
-    workbook_name = ''
-    workbook = None
-    worksheet = None
-    file_name = ''
-    extension = 'xlsx'
-    output = None
-    data_sets = [
-        {
-            'sheet_name': 'Sheet1',
-            'data': [{}],
-            'column_order': ['Col1', 'Col2', 'Col3'],
-            'column_formats': {'Col1': {'border': 1}},
-            'column_label_overrides': {'Col1': 'ID', 'Col2': 'Item Category', 'Col3': 'Price'},
-        },
-    ]
-
-    total_sheets = 0
-    next_sheet_index = 0
-    sheet_name = ''
-    column_formats = {}
-    column_order = []
-    column_label_overrides = {}
-    data_set = {}
-    data = []
-    max_cols = 0
-    col_index = 0
-    row_index = 0
 
     def __init__(self, response, workbook_name, data_sets, local_tz, timezone_support=True, **kwargs):
         """
-
         :param response: can be an HttpResponse or a file name
         :param workbook_name: name for the workbook file
         :param data_sets: data for all pages, a set per page.  A set is a list of dictionaries
+            Example:
+                data_sets = [
+                    {
+                        'sheet_name': 'Sheet1',
+                        'data': [{}],
+                        'column_order': ['Col1', 'Col2', 'Col3'],
+                        'column_formats': {'Col1': {'border': 1}},
+                        'column_label_overrides': {'Col1': 'ID', 'Col2': 'Item Category', 'Col3': 'Price'},
+                    },
+                ]
         :param timezone_support: Are datetimes in the source data timezone aware?  If so, answer True
         :param local_tz: the timezone you want items displayed
         """
+
+        self.right_now = None
+        self.workbook = None
+        self.worksheet = None
+        self.file_name = ''
+        self.extension = 'xlsx'
+        self.output = None
+        self.total_sheets = 0
+        self.next_sheet_index = 0
+        self.sheet_name = ''
+        self.column_formats = {}
+        self.column_order = []
+        self.column_label_overrides = {}
+        self.column_header_format = None
+        self.footer_format = None
+        self.date_time_format = None
+        self.body_format = None
+        self.currency_format = None
+        self.data_set = {}
+        self.data = []
+        self.max_cols = 0
+        self.col_index = 0
+        self.row_index = 0
+
         if timezone_support:
             self.local_tz = pytz.timezone(local_tz)
             self.right_now = datetime.now(tz=self.local_tz)
