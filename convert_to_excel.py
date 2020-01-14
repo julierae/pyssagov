@@ -16,18 +16,16 @@ from excel_helper import Excel
 
 
 class EarningsData(object):
-    filename = ''
-    excel_file = None
-    user_name = ''
-    data_sets = []
-    data = {}
 
     def __init__(self, filename):
+        self.data_sets = []
+        self.data = {}
         self.filename = filename
         with open(self.filename) as fd:
             self.data = xmltodict.parse(fd.read())
         file, ext = os.path.splitext(os.path.basename(self.filename))
-        self.user_name = self.data.get('osss:OnlineSocialSecurityStatementData').get('osss:UserInformation').get('osss:Name').replace('.', '').replace(',', '').replace('-', '')
+        self.user_name = self.data.get('osss:OnlineSocialSecurityStatementData').get('osss:UserInformation').get(
+            'osss:Name').replace('.', '').replace(',', '').replace('-', '')
         self.build_data_sets()
         self.excel_file = Excel(response='{}.xlsx'.format(file),
                                 workbook_name='{}'.format(self.user_name), data_sets=self.data_sets,
@@ -35,7 +33,8 @@ class EarningsData(object):
         print('Writing file: {}/{}.xlsx'.format(os.getcwd(), file))
 
     def build_data_sets(self):
-        earnings_record = self.data.get('osss:OnlineSocialSecurityStatementData').get('osss:EarningsRecord').get('osss:Earnings')
+        earnings_record = self.data.get('osss:OnlineSocialSecurityStatementData').get('osss:EarningsRecord').get(
+            'osss:Earnings')
         column_order = ['Year', 'Fica Earnings', 'Medicare Earnings', ]
         data = []
         for record in earnings_record:
